@@ -3,9 +3,11 @@
 #include <unistd.h>
 
 void* print_moon(){
+    int n = 0;
     while(1){
-        printf("Heloo moon");
-        sleep(1);
+        printf("Hello moon %d\n", n);
+	n++;
+        usleep(200);
     }
 }
 
