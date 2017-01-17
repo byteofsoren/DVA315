@@ -1,19 +1,25 @@
 #ifndef WRAPPER_H
 #define WRAPPER_H
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <mqueue.h>
+#include <pthread.h>
 
 
 
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
 
-extern int initSocket (int * socketHandle);
-extern int socketConnect (int * socketHandle);
+extern int MQcreate (mqd_t * mq, char * name);
+extern int MQconnect (mqd_t * mq, char * name);
+extern int MQread (mqd_t * mq, char ** refBuffer);
+extern int MQwrite (mqd_t * mq, char * data);
 
-extern int mailslotWrite (int * socketHandle, void * msg, int msgSize);
-extern int mailslotRead (int * socketHandle, void * msg, int msgSize);
 
-extern int socketClose (int * socketHandle);
 
 
 // Struct for planet data will be used in lab 2 and 3 !!!!!
