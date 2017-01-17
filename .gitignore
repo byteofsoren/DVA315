@@ -34,3 +34,8 @@
 
 # ycm.
 *.py
+#tags
+tags
+
+#ignore program
+prog
