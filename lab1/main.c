@@ -6,7 +6,6 @@ void* print_moon(){
 
     while(1){
         printf("Hello moon \n");
-
         usleep(200);
     }
 }
