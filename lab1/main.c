@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "skelett-linux/wrapper.h"
 
 void* print_moon(){
     int i;
