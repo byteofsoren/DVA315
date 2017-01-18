@@ -15,14 +15,13 @@ void* print_moon(){
 
 int main(void) {
 	int i;
-    pthread_t thread;
    while(1){
 	for(i = 0; i < 10; i++) {
 		printf("Hello world!\n");
 		usleep(1 * second);
 	}
-	pthread_create(&thread, NULL, print_moon, NULL);
-	pthread_join(thread, NULL);
+	threadCreate(print_moon, NULL);
 	}
 	return 0;
 }
+
