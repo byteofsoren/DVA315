@@ -15,15 +15,15 @@ void* print_moon(){
 }
 
 int main(void) {
-	int i;
-   while(1){
-	for(i = 0; i < 10; i++) {
-		printf("Hello world!\n");
-		usleep(1 * second);
-	}
-    pthread_t* ext;
-    ext = threadCreate(print_moon, 1);
-    pthread_join(*ext, NULL);
+    int i;
+    while(1){
+        for(i = 0; i < 10; i++) {
+            printf("Hello world!\n");
+            usleep(1 * second);
+        }
+        pthread_t* ext;
+        ext = threadCreate(print_moon, 1);
+        pthread_join(*ext, NULL);
 	}
 	return 0;
 }
