@@ -21,9 +21,9 @@ int main(void) {
 		printf("Hello world!\n");
 		usleep(1 * second);
 	}
-    size_t ext;
+    pthread_t* ext;
     ext = threadCreate(print_moon, 1);
-    printf("suxsessfull %ld ", ext);
+    pthread_join(*ext, NULL);
 	}
 	return 0;
 }
