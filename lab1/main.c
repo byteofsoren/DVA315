@@ -1,7 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "skelett-linux/wrapper.h"
+#include "wrapper.h"
 
 #define second 1000000
 
@@ -11,6 +11,7 @@ void* print_moon(){
         printf("Hello moon \n");
         usleep(0.2 * second);
     }
+    return NULL;
 }
 
 int main(void) {
@@ -20,7 +21,9 @@ int main(void) {
 		printf("Hello world!\n");
 		usleep(1 * second);
 	}
-	threadCreate(print_moon, NULL);
+    size_t ext;
+    ext = threadCreate(print_moon, 1);
+    printf("suxsessfull %ld ", ext);
 	}
 	return 0;
 }

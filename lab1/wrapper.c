@@ -3,21 +3,26 @@
 
 int MQcreate (mqd_t * mq, char * name)
 {
+    return 0;
 }
 int MQconnect (mqd_t * mq, char * name)
 {
+    return 0;
 }
 
 int MQread (mqd_t * mq, char ** refBuffer)
 {
+    return 0;
 }
 
 int MQwrite (mqd_t * mq, char * sendBuffer)
 {
+    return 0;
 }
 
 int MQclose(mqd_t * mq, char * name)
 {
+    return 0;
 }
 int threadCreate (void * functionCall, int threadParam)
 {
