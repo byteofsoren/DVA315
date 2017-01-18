@@ -27,7 +27,9 @@ int MQclose(mqd_t * mq, char * name)
 pthread_t* threadCreate (void * functionCall, int threadParam)
 {
 	pthread_t* thread = (pthread_t*)calloc(sizeof(pthread_t), 1);
-	pthread_create(thread, NULL, functionCall, &threadParam);
+    int* parm = (int*)calloc(sizeof(int),1);
+    *parm = threadParam;
+	pthread_create(thread, NULL, functionCall, parm);
 	return thread;
 	//This might work, but threadParam might go out of scope before the thread is created
 }

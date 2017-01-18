@@ -11,10 +11,10 @@ OBJECTS=$(TARGET:=.o)
 ## EXECFILE is the name on the exe file you want
 EXECFILE=prog
 ## LFLAGS is the libary linker flags like -lncurses or -lpthread.
-LFLAGS=-pthread
+LFLAGS=-pthread -lrt
 #LFLAGS=-lncurses -lm
 ## CFLAGS tells the copmiler to compile with diffrent flaggs mostly -g -Wall
-CFLAGS=-g
+CFLAGS=-g -Wall
 ## If files is from windows then run
 ## recode ISO-8859-1..UTF-8 main.c
 ## or even better for file in *.{c,h} ; do recode ISO-8859-1..UTF-8 $file; done
