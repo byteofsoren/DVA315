@@ -4,28 +4,35 @@
 #include "wrapper.h"
 
 #define second 1000000
+pthread_mutex_t p;
 
 void* print_moon(void * arg){
     int i;
-    int *threadParam;
-    threadParam =  (int*)arg;
-    for(i = 0; i < 10; i++) {
-        printf("Hello moon id=%d\n", *threadParam);
-        usleep(0.2 * second);
+    while(1){
+     
+        pthread_mutex_lock(&p);
+        for(i = 0; i < 10; i++) {
+            printf("Hello moon\n");
+            usleep(0.2 * second);
+        }
+        pthread_mutex_unlock(&p);
+        usleep(1);
     }
     return NULL;
 }
 
 int main(void) {
     int i;
+
+    threadCreate(print_moon, 0);
     while(1){
+        pthread_mutex_lock(&p);
         for(i = 0; i < 10; i++) {
             printf("Hello world!\n");
-            usleep(1 * second);
+            usleep(0.01 * second);
         }
-        pthread_t* thr;
-        thr = threadCreate(print_moon, 1);
-        pthread_join(*thr, NULL);
+        pthread_mutex_unlock(&p);
+        usleep(1);
 	}
 	return 0;
 }

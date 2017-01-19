@@ -12,7 +12,7 @@
 
 
 // Mailslot handling:
-pthread_t* threadCreate (void * functionCall, int threadParam);
+extern int threadCreate (void * functionCall, int threadParam);
 
 extern int MQcreate (mqd_t * mq, char * name);
 extern int MQconnect (mqd_t * mq, char * name);
