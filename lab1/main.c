@@ -16,7 +16,7 @@ void* print_moon(void * arg){
             usleep(0.2 * second);
         }
         pthread_mutex_unlock(&p);
-        usleep(1);
+        usleep(0);
     }
     return NULL;
 }
@@ -29,10 +29,10 @@ int main(void) {
         pthread_mutex_lock(&p);
         for(i = 0; i < 10; i++) {
             printf("Hello world!\n");
-            usleep(0.01 * second);
+            usleep(1 * second);
         }
         pthread_mutex_unlock(&p);
-        usleep(1);
+        usleep(0);
 	}
 	return 0;
 }
