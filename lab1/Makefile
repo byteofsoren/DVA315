@@ -14,7 +14,7 @@ EXECFILE=prog
 LFLAGS=-pthread -lrt
 #LFLAGS=-lncurses -lm
 ## CFLAGS tells the copmiler to compile with diffrent flaggs mostly -g -Wall
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall 
 ## If files is from windows then run
 ## recode ISO-8859-1..UTF-8 main.c
 ## or even better for file in *.{c,h} ; do recode ISO-8859-1..UTF-8 $file; done

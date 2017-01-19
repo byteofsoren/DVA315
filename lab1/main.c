@@ -2,9 +2,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "wrapper.h"
-
+#define name "/test"
 #define second 1000000
 pthread_mutex_t p;
+
+
+//Det compilerar med gcc -g wrapper.c main.c -o prog -lrt -pthread men inte med make
 
 void* print_moon(void * arg){
     int i;
@@ -16,14 +19,15 @@ void* print_moon(void * arg){
             usleep(0.2 * second);
         }
         pthread_mutex_unlock(&p);
-        usleep(0);
+        usleep(100);
     }
     return NULL;
 }
 
 int main(void) {
     int i;
-
+    mqd_t talker;
+    MQcreate(&talker, name);
     threadCreate(print_moon, 0);
     while(1){
         pthread_mutex_lock(&p);
@@ -32,7 +36,7 @@ int main(void) {
             usleep(1 * second);
         }
         pthread_mutex_unlock(&p);
-        usleep(0);
+        usleep(100);
 	}
 	return 0;
 }

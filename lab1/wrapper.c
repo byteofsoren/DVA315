@@ -1,9 +1,16 @@
 #include "wrapper.h"
+
 #define MAX_SIZE 1024
 
 int MQcreate (mqd_t * mq, char * name)
 {
-    return 0;
+    struct mq_attr attr;
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = MAX_SIZE;
+    attr.mq_curmsgs = 0;
+    *mq = mq_open(name, O_CREAT | O_RDONLY, 0644, &attr);
+    return (mqd_t)-1 != *mq;
 }
 int MQconnect (mqd_t * mq, char * name)
 {
