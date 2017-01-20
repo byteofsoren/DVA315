@@ -11,13 +11,13 @@ pthread_mutex_t p;
 //Det compilerar med gcc -g wrapper.c main.c -o prog -lrt -pthread men inte med make
 
 void* print_moon(void * arg){
-    int i;
+    mqd_t talker;
+    MQconnect(&talker, name);
+    char * data;
     while(1){
         pthread_mutex_lock(&p);
-        for(i = 0; i < 10; i++) {
-            printf("Hello moon\n");
-            usleep(0.2 * second);
-        }
+        MQread(&talker, &data);
+        printf("%s\n", data);
         pthread_mutex_unlock(&p);
         usleep(100);
     }
@@ -25,18 +25,17 @@ void* print_moon(void * arg){
 }
 
 int main(void) {
-    int i;
+
     mqd_t talker;
     MQcreate(&talker, name);
     threadCreate(print_moon, 0);
     while(1){
         pthread_mutex_lock(&p);
-        for(i = 0; i < 10; i++) {
+
             char* text;
             text = (char*)input("prompt: ");
-            //printf("Enterd text %s\n", text);
-            //usleep(1 * second);
-        }
+            MQwrite(&talker, text);
+
         pthread_mutex_unlock(&p);
         usleep(100);
 	}
