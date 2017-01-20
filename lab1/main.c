@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "wrapper.h"
+#include "input.h"
 #define name "/test"
 #define second 1000000
 pthread_mutex_t p;
@@ -12,7 +13,6 @@ pthread_mutex_t p;
 void* print_moon(void * arg){
     int i;
     while(1){
-     
         pthread_mutex_lock(&p);
         for(i = 0; i < 10; i++) {
             printf("Hello moon\n");
@@ -28,6 +28,9 @@ int main(void) {
     int i;
     mqd_t talker;
     MQcreate(&talker, name);
+    char* text;
+    text = (char*)input("prompt: ");
+    printf("Enterd text %s\n", text);
     threadCreate(print_moon, 0);
     while(1){
         pthread_mutex_lock(&p);
