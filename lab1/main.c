@@ -10,7 +10,7 @@ pthread_mutex_t p;
 
 //Det compilerar med gcc -g wrapper.c main.c -o prog -lrt -pthread men inte med make
 
-void* print_moon(void * arg){
+void* print_moon(void){
     mqd_t talker;
     MQconnect(&talker, name);
     char * data;
@@ -31,11 +31,9 @@ int main(void) {
     threadCreate(print_moon, 0);
     while(1){
         pthread_mutex_lock(&p);
-
-            char* text;
-            text = (char*)input("prompt: ");
-            MQwrite(&talker, text);
-
+        char* text;
+        text = (char*)input("prompt: ");
+        MQwrite(&talker, text);
         pthread_mutex_unlock(&p);
         usleep(100);
 	}
