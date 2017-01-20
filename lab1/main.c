@@ -28,15 +28,14 @@ int main(void) {
     int i;
     mqd_t talker;
     MQcreate(&talker, name);
-    char* text;
-    text = (char*)input("prompt: ");
-    printf("Enterd text %s\n", text);
     threadCreate(print_moon, 0);
     while(1){
         pthread_mutex_lock(&p);
         for(i = 0; i < 10; i++) {
-            printf("Hello world!\n");
-            usleep(1 * second);
+            char* text;
+            text = (char*)input("prompt: ");
+            //printf("Enterd text %s\n", text);
+            //usleep(1 * second);
         }
         pthread_mutex_unlock(&p);
         usleep(100);
