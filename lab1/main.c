@@ -35,6 +35,7 @@ int main(void) {
         text = (char*)input("prompt: ");
         MQwrite(&talker, text);
         pthread_mutex_unlock(&p);
+        free(text);
         usleep(100);
 	}
 	return 0;
