@@ -1,23 +1,23 @@
-#include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
 #include "wrapper.h"
 #include "input.h"
-#define name "/test"
+#define NAME "/test"
 #define second 1000000
 pthread_mutex_t p;
 
 
-//Det compilerar med gcc -g wrapper.c main.c -o prog -lrt -pthread men inte med make
+
 
 void* print_moon(void * arg){
-    mqd_t talker;
-    MQconnect(&talker, name);
-    char * data;
+    struct messageBuffer buf;
+    buf.mtype = 1;
+    int id;
+    MQcreate(&id, NAME);   
     while(1){
         pthread_mutex_lock(&p);
-        MQread(&talker, &data);
-        printf("%s\n", data);
+        MQread(id, 1, &buf);
+        printf("%s\n", buf.data);
         pthread_mutex_unlock(&p);
         usleep(100);
     }
@@ -25,17 +25,17 @@ void* print_moon(void * arg){
 }
 
 int main(void) {
-
-    mqd_t talker;
-    MQcreate(&talker, name);
+    struct messageBuffer buf;
+    buf.mtype = 1;
+    int id;
+    MQcreate(&id, NAME);
     threadCreate(print_moon, 0);
+    buf.data = (char*)calloc(1,1);
     while(1){
         pthread_mutex_lock(&p);
-
-            char* text;
-            text = (char*)input("prompt: ");
-            MQwrite(&talker, text);
-
+        free(buf.data);
+        buf.data = (char*)input("prompt: ");
+        MQwrite(id, &buf);
         pthread_mutex_unlock(&p);
         usleep(100);
 	}

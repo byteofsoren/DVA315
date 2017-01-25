@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
-#include <mqueue.h>
+#include <sys/msg.h>
 #include <pthread.h>
 
 
@@ -14,11 +14,17 @@
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
 
-extern int MQcreate (mqd_t * mq, char * name);
-extern int MQconnect (mqd_t * mq, char * name);
-extern int MQread (mqd_t * mq, char ** refBuffer);
-extern int MQwrite (mqd_t * mq, char * data);
 
+struct messageBuffer {
+    long mtype;
+    char *data;
+};
+
+extern int MQcreate (int * id,char * name);
+extern int MQconnect (int * id, char * name);
+extern int MQread (int id, long type, struct messageBuffer *dataBuffer);
+extern int MQwrite (int id, struct messageBuffer *dataBuffer);
+extern int MQclose (int id);
 
 
 

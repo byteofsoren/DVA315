@@ -2,42 +2,53 @@
 
 #define MAX_SIZE 1024
 
-int MQcreate (mqd_t * mq, char * name)
+int MQcreate (int *id, char * name)
 {
-    struct mq_attr attr;
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = MAX_SIZE;
-    attr.mq_curmsgs = 0;
-    *mq = mq_open(name, O_CREAT | O_RDWR, &attr);
-    return (mqd_t)-1 != *mq;
-}
-int MQconnect (mqd_t * mq, char * name)
-{
-    struct mq_attr attr;
-     attr.mq_flags = 0;
-     attr.mq_maxmsg = 10;
-     attr.mq_msgsize = MAX_SIZE;
-     attr.mq_curmsgs = 0;
-     *mq = mq_open(name, O_RDWR, &attr);
-     return (mqd_t)-1 != *mq;
+    key_t mq = (key_t)ftok(name, 'm');
+    *id = msgget(mq, 0666 | IPC_CREAT);
+    if (*id == -1) return 0;
+    return 1;
 }
 
-int MQread (mqd_t * mq, char ** refBuffer)
+int MQconnect (int *id, char * name)
 {
-    return mq_receive(*mq, *refBuffer, MAX_SIZE, 0);
+    return MQcreate(id, name);
 }
 
-int MQwrite (mqd_t * mq, char * sendBuffer)
+int MQread (int id, long type, struct messageBuffer *dataBuffer)
+{
+    int     result, length;
+    /* The length is essentially the size of the structure minus sizeof(mtype) */
+    length = sizeof(struct messageBuffer) - sizeof(long);
+    if((result = msgrcv(id, dataBuffer, length, type, 0)) == -1)
+    {
+        return(0);
+    }
+    return(1);
+}
+
+int MQwrite (int id, struct messageBuffer *dataBuffer)
 {   
-    return mq_send(*mq, sendBuffer, MAX_SIZE, 0);
+    int     result, length;
 
+    /* The length is essentially the size of the structure minus sizeof(mtype) */
+    length = sizeof(struct messageBuffer) - sizeof(long);        
+    if((result = msgsnd(id, dataBuffer, length, 0)) == -1)
+    {
+        return(0);
+    }                                
+    return(1);
 }
 
-int MQclose(mqd_t * mq, char * name)
+int MQclose(int id)
 {
- return mq_close(*mq);
+    if( msgctl(id, IPC_RMID, 0) == -1)
+    {
+        return(-1);
+    }        
+    return(0);
 }
+
 int threadCreate (void * functionCall, int threadParam)
 {
 	pthread_t thread;
