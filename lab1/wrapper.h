@@ -10,7 +10,8 @@
 #include <pthread.h>
 
 
-
+#define MAX_SIZE 1024
+#define MAX_MESSAGES 30
 // Mailslot handling:
 extern int threadCreate (void * functionCall, int threadParam);
 
@@ -19,6 +20,7 @@ extern int MQconnect (mqd_t * mq, char * name);
 extern int MQread (mqd_t * mq, char ** refBuffer);
 extern int MQwrite (mqd_t * mq, char * data);
 
+extern int MQclose(mqd_t * mq, const char *name);
 
 
 

@@ -1,7 +1,6 @@
 #include "wrapper.h"
 #include <errno.h>
 
-#define MAX_SIZE 1024
 
 int MQcreate (mqd_t * mq, char * name)
 {
@@ -11,7 +10,7 @@ int MQcreate (mqd_t * mq, char * name)
      * Should return 1 on success and 0 on fail*/
     struct mq_attr attr;
     attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
+    attr.mq_maxmsg = MAX_MESSAGES;
     attr.mq_msgsize = MAX_SIZE;
     attr.mq_curmsgs = 0;
     *mq = mq_open(name, O_CREAT | O_RDWR, &attr);
@@ -24,7 +23,7 @@ int MQconnect (mqd_t * mq, char * name)
      * Should return 1 on success and 0 on fail*/
     struct mq_attr attr;
     attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
+    attr.mq_maxmsg = MAX_MESSAGES;
     attr.mq_msgsize = MAX_SIZE;
     attr.mq_curmsgs = 0;
     *mq = mq_open(name, O_RDWR, &attr);
@@ -37,10 +36,17 @@ int MQread (mqd_t * mq, char ** refBuffer)
     /* Read a msg from a mailslot, return nr Uses mq as reference pointer,
      * so that you can 	reach the handle from anywhere
      * of successful bytes read */
-
-    int ret =  mq_receive(*mq, *refBuffer, MAX_SIZE, 0);
-    perror("mx_receive");
-    return ret;
+    int error = 0;
+    for (int i = 0; i < MAX_MESSAGES; ++i) {
+        int Merror = mq_receive(*mq, refBuffer[i], MAX_SIZE - 1, 0);
+        perror("mq_receive");
+        if (Merror == -1){
+            error = -1;
+            break;
+        }
+    }
+//    int ret =  mq_receive(*mq, *refBuffer, MAX_SIZE - 10, 0);
+    return error;
 }
 
 int MQwrite (mqd_t * mq, char * sendBuffer)
@@ -55,14 +61,20 @@ int MQwrite (mqd_t * mq, char * sendBuffer)
 
 }
 
-int MQclose(mqd_t * mq)
+int MQclose(mqd_t * mq, const char *name)
 {
     /* close a mailslot, returning whatever the service call returns
      * Uses mq as reference pointer, so that you can
      * reach the handle from anywhere
     * Should return 1 on success and 0 on fail*/
-
-	 return mq_close(*mq);
+    int error_close = 0 , error_unlink = 0;
+	error_close = mq_close(*mq);
+    error_unlink = mq_unlink(name);
+    if ((error_close == -1) | (error_unlink == -1)) {
+        return -1;
+    }else{
+        return 0;
+    }
 }
 int threadCreate (void * functionCall, int threadParam)
 {

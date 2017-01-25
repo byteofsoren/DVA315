@@ -32,7 +32,7 @@ run: clean all
 	./$(EXECFILE)
 
 debug: clean all
-	cgdb ./$(EXECFILE)
+	gdb ./$(EXECFILE)
 
 ddd: clean all
 	ddd ./$(EXECFILE) &
