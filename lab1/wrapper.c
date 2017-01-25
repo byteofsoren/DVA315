@@ -16,16 +16,29 @@ int MQconnect (int *id, char * name)
     return MQcreate(id, name);
 }
 
+int peek_message( int id, long type )
+{
+    int result, length;
+    if((result = msgrcv( id, NULL, 0, type,  IPC_NOWAIT)) == -1)
+    {
+        if(errno == E2BIG)
+            return(1);
+    }                       
+    return(0);
+}
+
 int MQread (int id, long type, struct messageBuffer *dataBuffer)
 {
     int     result, length;
-    /* The length is essentially the size of the structure minus sizeof(mtype) */
+    if(peek_message(id, type)){
     length = sizeof(struct messageBuffer) - sizeof(long);
     if((result = msgrcv(id, dataBuffer, length, type, 0)) == -1)
     {
         return(0);
     }
     return(1);
+    }
+    return(0);
 }
 
 int MQwrite (int id, struct messageBuffer *dataBuffer)
