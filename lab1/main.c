@@ -13,11 +13,13 @@ pthread_mutex_t p;
 void* print_moon(void * arg){
     struct messageBuffer buf;
     buf.mtype = 1;
+    buf.run = 1;
     int id;
-    while(1){
+    while(buf.run){
         pthread_mutex_lock(&p);
         MQcreate(&id, NAME);
         MQread(id, 1, &buf);
+
         printf("%s\n", buf.data);
         MQclose(id);
         pthread_mutex_unlock(&p);
@@ -30,15 +32,15 @@ void* print_moon(void * arg){
 int main(void) {
     struct messageBuffer buf;
     buf.mtype = 1;
-    buf.num = 0;
+    buf.run = 1;
     int id;
     threadCreate(print_moon, 0);
     buf.data = (char*)calloc(1,1);
-    while(1){
+    while(buf.run){
         pthread_mutex_lock(&p);
         free(buf.data);
         buf.data = (char*)input("prompt: ");
-        //buf.num += 1;
+        if(!strcmp(buf.data, "END")) buf.run = 0;
         MQcreate(&id, NAME);
         MQwrite(id, &buf);
         pthread_mutex_unlock(&p);
