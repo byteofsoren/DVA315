@@ -3,7 +3,7 @@
 ## CROSS_TOLL is used if you need co add a cross platform compiler.
 CROSS_TOLL=
 ## CC is the compiler you use in this project.
-CC=$(CROSS_TOLL) gcc
+CC=$(CROSS_TOLL) g++
 TTY=/dev/pts/2
 ## Target is the source files with out .c or .cpp  tex main.c ~> main
 TARGET_CLIENT=client wrapper
