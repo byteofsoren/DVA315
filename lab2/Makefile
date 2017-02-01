@@ -6,10 +6,13 @@ CROSS_TOLL=
 CC=$(CROSS_TOLL) gcc
 TTY=/dev/pts/2
 ## Target is the source files with out .c or .cpp  tex main.c ~> main
-TARGET=main wrapper
-OBJECTS=$(TARGET:=.o)
-## EXECFILE is the name on the exe file you want
-EXECFILE=prog
+TARGET_CLIENT=client wrapper
+TARGET_SERVER=server wrapper
+OBJECTS_CLIENT=$(TARGET_CLIENT:=.o) 
+OBJECTS_SERVER=$(TARGET_SERVER:=.o)
+EXECFILE_CLIENT=client.out
+EXECFILE_SERVER=server.out
+
 ## LFLAGS is the libary linker flags like -lncurses or -lpthread.
 LFLAGS=-pthread -lrt
 #LFLAGS=-lncurses -lm
@@ -22,25 +25,19 @@ CFLAGS=-g -Wall
 ## Also remember to create ctags in your src dir
 ##  $ ctags -R
 
-$(TARGET):
+$(TARGET_SERVER):
 	$(CC) $(CFLAGS) $(LFLAGS) -c $@.c
 
-all: clean $(TARGET)
-	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS) -o $(EXECFILE)
+server: $(TARGET_SERVER)
+	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS_SERVER) -o $(EXECFILE_SERVER)
 
-run: clean all
-	./$(EXECFILE)
+$(TARGET_CLIENT):
+	$(CC) $(CFLAGS) $(LFLAGS) -c $@.c
 
-debug: clean all
-	cgdb ./$(EXECFILE)
-
-ddd: clean all
-	ddd ./$(EXECFILE) &
+client: $(TARGET_CLIENT)
+	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS_CLIENT) -o $(EXECFILE_CLIENT)
 
 .PHONY: clean valgrind
 
-valgrind: clean all
-	valgrind ./$(EXECFILE)
-
 clean:
-	rm -f *.o $(EXECFILE) *.gch
+	rm -f *.o $(EXECFILE_CLIENT) $(EXECFILE_SERVER) *.gch
