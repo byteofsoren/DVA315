@@ -18,7 +18,7 @@ extern int threadCreate (void * functionCall, int threadParam);
 struct messageBuffer {
     long mtype;
     char *data;
-    int num;
+    int run;
 };
 
 extern int MQcreate (int * id,char * name);

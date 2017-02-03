@@ -3,6 +3,7 @@
 
 #define MAX_SIZE 1024
 
+//generates a message queue identifier, saving it to id, and connects to that message queue, creating it if it does not already exists.
 int MQcreate (int *id, char * name)
 {
     key_t mq = (key_t)ftok(name, 'm');
@@ -11,11 +12,13 @@ int MQcreate (int *id, char * name)
     return 1;
 }
 
+//calls MQcreate
 int MQconnect (int *id, char * name)
 {
     return MQcreate(id, name);
 }
 
+//checks if there exist a message of type type in the message queue defined by id
 int peek_message( int id, long type )
 {
     int result, length;
@@ -27,6 +30,7 @@ int peek_message( int id, long type )
     return(0);
 }
 
+//calls peek_message with type, if it returns 1(true), reads the message from the message queue defined by id and save it to dataBuffer
 int MQread (int id, long type, struct messageBuffer *dataBuffer)
 {
     int     result, length;
@@ -41,11 +45,12 @@ int MQread (int id, long type, struct messageBuffer *dataBuffer)
     return(0);
 }
 
+//writes the data from dataBuffer as message to the message queue defined by id
 int MQwrite (int id, struct messageBuffer *dataBuffer)
 {   
     int     result, length;
 
-    /* The length is essentially the size of the structure minus sizeof(mtype) */
+
     length = sizeof(struct messageBuffer) - sizeof(long);        
     if((result = msgsnd(id, dataBuffer, length, 0)) == -1)
     {
@@ -54,6 +59,7 @@ int MQwrite (int id, struct messageBuffer *dataBuffer)
     return(1);
 }
 
+//destroys the message queue defined by id
 int MQclose(int id)
 {
     if( msgctl(id, IPC_RMID, 0) == -1)
@@ -63,11 +69,9 @@ int MQclose(int id)
     return(0);
 }
 
+//creats at thread using pthreads, starting functionCall in that thread
 int threadCreate (void * functionCall, int threadParam)
 {
-	/* Creates a thread running threadFunc */
-	/* Should return 1 on success and 0 on fail*/
-
 	pthread_t thread;
     int* par = (void *)calloc(sizeof(int), 1);
     *par = threadParam;
