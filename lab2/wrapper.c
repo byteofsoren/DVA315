@@ -1,5 +1,7 @@
 #include "wrapper.h"
 #include <errno.h>
+#include "common.h"
+#include <pthread.h>
 
 #define MAX_SIZE 1024
 
@@ -21,12 +23,12 @@ int MQconnect (int *id, char * name)
 //checks if there exist a message of type type in the message queue defined by id
 int peek_message( int id, long type )
 {
-    int result, length;
+    int result;
     if((result = msgrcv( id, NULL, 0, type,  IPC_NOWAIT)) == -1)
     {
         if(errno == E2BIG)
             return(1);
-    }                       
+    }
     return(0);
 }
 
@@ -47,15 +49,15 @@ int MQread (int id, long type, struct messageBuffer *dataBuffer)
 
 //writes the data from dataBuffer as message to the message queue defined by id
 int MQwrite (int id, struct messageBuffer *dataBuffer)
-{   
+{
     int     result, length;
 
 
-    length = sizeof(struct messageBuffer) - sizeof(long);        
+    length = sizeof(struct messageBuffer) - sizeof(long);
     if((result = msgsnd(id, dataBuffer, length, 0)) == -1)
     {
         return(0);
-    }                                
+    }
     return(1);
 }
 
@@ -65,17 +67,20 @@ int MQclose(int id)
     if( msgctl(id, IPC_RMID, 0) == -1)
     {
         return(-1);
-    }        
+    }
     return(0);
 }
 
 //creats at thread using pthreads, starting functionCall in that thread
 int threadCreate (void * functionCall, int threadParam)
 {
-	pthread_t thread;
-    int* par = (void *)calloc(sizeof(int), 1);
+	pthread_t *thread;
+    thread = (pthread_t*) calloc(sizeof(pthread_t),1);
+    int* par = (int *)calloc(sizeof(int), 1);
     *par = threadParam;
-	return pthread_create(&thread, NULL, functionCall, par);
+    int thread_pid = pthread_create(thread,NULL, functionCall,NULL);
+    return thread_pid;
+	//return pthread_create(&thread, NULL, functionCall, NULL);
 }
 
 
