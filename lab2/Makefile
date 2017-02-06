@@ -3,13 +3,18 @@
 ## CROSS_TOLL is used if you need co add a cross platform compiler.
 CROSS_TOLL=
 ## CC is the compiler you use in this project.
-CC=$(CROSS_TOLL) gcc
+CC=$(CROSS_TOLL) gcc -std=gnu99
+CC_CPP=$(CROSS_TOLL) g++ -std=c++0x
 TTY=/dev/pts/2
 ## Target is the source files with out .c or .cpp  tex main.c ~> main
-TARGET_CLIENT=client wrapper
-TARGET_SERVER=server wrapper
+TARGET_CLIENT=wrapper client
+TARGET_CLIENT_CPP=
+TARGET_SERVER=
+TARGET_SERVER_CPP=server
 OBJECTS_CLIENT=$(TARGET_CLIENT:=.o)
+OBJECTS_CLIENT_CPP=$(TARGET_CLIENT_CPP:=.o)
 OBJECTS_SERVER=$(TARGET_SERVER:=.o)
+OBJECTS_SERVER_CPP=$(TARGET_SERVER_CPP:=.o)
 EXECFILE_CLIENT=client.out
 EXECFILE_SERVER=server.out
 
@@ -26,16 +31,22 @@ CFLAGS=-g -Wall
 ##  $ ctags -R
 
 $(TARGET_SERVER):
-	$(CC) -c $@.c $(CFLAGS) $(LFLAGS)
+	$(CC) $(CFLAGS) $(LFLAGS) -c $@.c
 
-server: $(TARGET_SERVER)
-	$(CC) -o $(EXECFILE_SERVER) $(CFLAGS) $(LFLAGS) $(OBJECTS_SERVER)
+$(TARGET_SERVER_CPP):
+	$(CC_CPP) $(CFLAGS) $(LFLAGS) -c $@.cpp
+
+ser: $(TARGET_SERVER_CPP) $(TARGET_SERVER)
+	$(CC)  $(CFLAGS) $(LFLAGS) $(OBJECTS_SERVER_CPP) $(OBJECTS_SERVER) -o $(EXECFILE_SERVER)
 
 $(TARGET_CLIENT):
 	$(CC) $(CFLAGS) $(LFLAGS) -c $@.c
 
-client: $(TARGET_CLIENT)
-	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS_CLIENT) -o $(EXECFILE_CLIENT)
+$(TARGET_CLIENT_CPP):
+	$(CC_CPP) $(CFLAGS) $(LFLAGS) -c $@.cpp
+
+cli: $(TARGET_CLIENT_CPP) $(TARGET_CLIENT)
+	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS_CLIENT_CPP) $(OBJECTS_CLIENT) -o $(EXECFILE_CLIENT)
 
 .PHONY: clean valgrind
 
