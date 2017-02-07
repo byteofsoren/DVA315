@@ -19,7 +19,8 @@ EXECFILE_CLIENT=client.out
 EXECFILE_SERVER=server.out
 
 ## LFLAGS is the libary linker flags like -lncurses or -lpthread.
-LFLAGS=-pthread -lrt
+LFLAGS=-pthread -lrt -lsfml-graphics -lsfml-window -lsfml-system
+
 #LFLAGS=-lncurses -lm
 ## CFLAGS tells the copmiler to compile with diffrent flaggs mostly -g -Wall
 CFLAGS=-g -Wall
