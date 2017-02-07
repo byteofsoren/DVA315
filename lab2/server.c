@@ -43,4 +43,5 @@ void* planet(planet_type* myPlanet)
     free(tmp);
     //Send data that planet is dead
     free(myPlanet);
+    return (void*) NULL;
 }
