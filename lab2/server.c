@@ -1,7 +1,7 @@
 #include "wrapper.h"
 #include "list.h"
 #include "common.h"
-#include "databse.h"
+#include "database.h"
 #include <math.h>
 #define G 0.0000000000667259
 #define dt 1
