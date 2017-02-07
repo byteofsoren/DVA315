@@ -23,6 +23,7 @@ void *showGrapics(void){
             plot->addPlanet(iter->planetPointer);
         }
         plot->update();
+        usleep(FRAMEUPDATETIMER);
     }
 
 }

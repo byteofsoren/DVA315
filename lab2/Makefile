@@ -9,8 +9,8 @@ TTY=/dev/pts/2
 ## Target is the source files with out .c or .cpp  tex main.c ~> main
 TARGET_CLIENT=wrapper client
 TARGET_CLIENT_CPP=
-TARGET_SERVER=
-TARGET_SERVER_CPP=server
+TARGET_SERVER=server
+TARGET_SERVER_CPP=graphics
 OBJECTS_CLIENT=$(TARGET_CLIENT:=.o)
 OBJECTS_CLIENT_CPP=$(TARGET_CLIENT_CPP:=.o)
 OBJECTS_SERVER=$(TARGET_SERVER:=.o)
