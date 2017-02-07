@@ -6,6 +6,9 @@
 #define G 0.0000000000667259
 #define dt 1
 
+pthread_mutex_t databaseControl;
+database databaseHead;
+
 void* planet(planet_type* myPlanet)
 {
     database* tmp;

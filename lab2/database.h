@@ -4,11 +4,11 @@
 #include "wrapper.h"
 #include "list.h"
 
-pthread_mutex_t databaseControl;
+extern pthread_mutex_t databaseControl;
 typedef struct linkedList
 {
     struct list_head list;
     planet_type* planetPointer;
 } database;
-database databaseHead;
+extern database databaseHead;
 #endif
