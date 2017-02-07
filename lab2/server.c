@@ -40,7 +40,7 @@ void* planet(planet_type* myPlanet)
     }
     pthread_mutex_lock(&databaseControl);
     list_del(&tmp->list);
-    free(temp);
+    free(tmp);
     //Send data that planet is dead
     free(myPlanet);
 }
