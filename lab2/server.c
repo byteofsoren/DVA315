@@ -9,7 +9,7 @@
 void* planet(planet_type* myPlanet)
 {
     database* tmp;
-    tmp = (database)calloc(1,sizeof(database));
+    tmp = (database*)calloc(1,sizeof(database));
     tmp->planetPointer = myPlanet;
     pthread_mutex_lock(&databaseControl);
     list_add_tail(&(tmp->list), &(databaseHead.list));
