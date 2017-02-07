@@ -9,11 +9,7 @@
 
 #define FRAMEUPDATETIMER 10000 //Microseconds, increase value for slower update time
 
-void mailThread()
-{
-	//Mailing thread
-}
-int main()
+
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Orbital system");
     sf::CircleShape shape(100.f);
