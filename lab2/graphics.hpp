@@ -7,7 +7,7 @@
 #include "wrapper.h"
 #include "database.h"
 
-void *showGrapics(void); // This is a thread create functinon to show the plotter.
+extern "C" void *showGrapics(void); // This is a thread create functinon to show the plotter.
 
 class Graphics
 {

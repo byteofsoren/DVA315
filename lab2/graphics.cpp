@@ -4,14 +4,16 @@
 #include <math.h>
 #include <string.h>
 #include <unistd.h>
-#include "wrapper.h"
 #include "graphics.hpp"
+extern "C"  {
+#include "wrapper.h"
 #include "list.h"
 #include "database.h"
 #include "common.h"
+}
 
 #define FRAMEUPDATETIMER 10000 //Microseconds, increase value for slower update time
-void *showGrapics(void){
+extern "C" void *showGrapics(void){
     Graphics *plot = new Graphics(DISPW, DISPH);
     // Read the data from the databese.
     while(plot->isOpen()){
