@@ -17,9 +17,12 @@ void *showGrapics(void){
         // Running while the client is open.
         plot->clear();
         // add planets to the screen
-        pthread_mutex_lock(&databaseControl);// first lock the mutex
-
-        pthread_mutex_unlock(&databaseControl); // Un lock the mutex.
+        pthread_mutex_lock(&databaseControl);       // first lock the mutex
+        NODE* iter;                                 // pointer to iterate the planets.
+        for (iter = databaseHead; iter !=  NULL ; iter = iter->prev_planet) {
+            plot->addPlanet(iter->planet);
+        }
+        pthread_mutex_unlock(&databaseControl);     // Un lock the mutex.
         plot->update();
         usleep(FRAMEUPDATETIMER);
     }
@@ -60,13 +63,13 @@ int  Graphics::isOpen()
 }
 
 
-/*int Graphics::addPlanet(planet_type *pl)
+int Graphics::addPlanet(planet_type *pl)
 {
     // Adds planet to the vector so it renders.
-    sf::CircleShape gplanet(50);
+    sf::CircleShape gplanet(pl->mass);
     gplanet.setPosition(pl->sx, pl->sy);
     gplanet.setFillColor(sf::Color::Green);
     window.draw(gplanet);
     return 0;
-}*/
+}
 

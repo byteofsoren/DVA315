@@ -24,7 +24,6 @@ int main()
 	{
 		printf("Failed to connect to server!");
 	}
-	
 	while(1)
 	{
 
