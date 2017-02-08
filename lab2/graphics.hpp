@@ -2,11 +2,10 @@
 #define GRAPHICS_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <vector>
+//#include "database.h"
 extern "C" {
 #include "common.h"
 #include "wrapper.h"
-#include "database.h"
 }
 extern "C" void *showGrapics(void); // This is a thread create functinon to show the plotter.
 
@@ -17,8 +16,6 @@ private:
     int running;
     sf::RenderWindow window;
     sf::Event event;
-    //database *data;
-    //std::vector<planet_type> *planets;
 
 public:
     Graphics(int width, int height);
@@ -26,7 +23,7 @@ public:
     void update();
     void clear();
     int isOpen();
-//    int addPlanet(planet_type *pl);
+    int addPlanet(planet_type *pl);
     void clearPlanets();
 
 };
