@@ -20,12 +20,11 @@ EXECFILE_SERVER=server.out
 
 ## LFLAGS is the libary linker flags like -lncurses or -lpthread.
 LFLAGS=-pthread -lrt -lsfml-graphics -lsfml-window -lsfml-system
-LFLAGS_CURSES=-lpanel -lncurses
-
+LFLAGS_CURSES=-lform -lncurses
 
 #LFLAGS=-lncurses -lm
 ## CFLAGS tells the copmiler to compile with diffrent flaggs mostly -g -Wall
-CFLAGS=-g -Wall -c
+CFLAGS=-g -Wall
 ## If files is from windows then run
 ## recode ISO-8859-1..UTF-8 main.c
 ## or even better for file in *.{c,h} ; do recode ISO-8859-1..UTF-8 $file; done
