@@ -27,8 +27,7 @@ typedef struct pt {
 
 struct messageBuffer {
     long mtype;
-    planet_type planet; 
-   
+    planet_type planet;
 };
 
 extern int MQcreate (int * id,char * name);
