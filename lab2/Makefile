@@ -20,6 +20,8 @@ EXECFILE_SERVER=server.out
 
 ## LFLAGS is the libary linker flags like -lncurses or -lpthread.
 LFLAGS=-pthread -lrt -lsfml-graphics -lsfml-window -lsfml-system
+LFLAGS_CURSES=-lpanel -lncurses
+
 
 #LFLAGS=-lncurses -lm
 ## CFLAGS tells the copmiler to compile with diffrent flaggs mostly -g -Wall
@@ -36,14 +38,14 @@ CFLAGS=-g -Wall
 	$(CC_CPP) $(LFLAGS) $(CFLAGS) -c $<
 
 .c.o:
-	$(CC) $(LFLAGS) $(CFLAGS) -c $<
+	$(CC) $(LFLAGS) $(LFLAGS_CURSES) $(CFLAGS) -c $<
 
 #all: $(OBJECTS_CLIENT) $(OBJECTS_CLIENT_CPP) $(OBJECTS_SERVER) $(OBJECTS_SERVER_CPP)
 serv: $(OBJECTS_SERVER) $(OBJECTS_SERVER_CPP)
 	$(CC_CPP) $(CFLAGS) $(LFLAGS) $(OBJECTS_SERVER) $(OBJECTS_SERVER_CPP) -o $(EXECFILE_SERVER)
 
 cli: $(OBJECTS_CLIENT) $(OBJECTS_CLIENT_CPP)
-	$(CC_CPP) $(CFLAGS) $(LFLAGS) $(OBJECTS_CLIENT) $(OBJECTS_CLIENT_CPP) -o $(EXECFILE_CLIENT)
+	$(CC) $(CFLAGS) $(LFLAGS) $(LFLAGS_CURSES) $(OBJECTS_CLIENT) $(OBJECTS_CLIENT_CPP) -o $(EXECFILE_CLIENT)
 
 all: serv cli
 
