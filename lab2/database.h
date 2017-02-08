@@ -5,10 +5,9 @@ extern "C" {
 #define DATABASE_H
 #include <pthread.h>
 #include "wrapper.h"
-//#include "list.h"
+
 
 extern pthread_mutex_t databaseControl;
-
 
 typedef struct node
 {
@@ -17,12 +16,11 @@ typedef struct node
     struct node *next_planet;
 } NODE;
 
-NODE *DB;
+extern NODE *databaseHead;
 
-void createDatabase(NODE data);
-void addPlanet(DB data, planet_type *planet);
-planet_type *getPlanet(DB data, int pid);
-void removePlanet(DB data, int pid);
+void addPlanet(NODE *data);
+
+void removePlanet(NODE *data);
 
 
 

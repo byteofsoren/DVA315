@@ -5,30 +5,27 @@
 #define G 0.0000000000667259
 #define dt 1
 
-pthread_mutex_t databaseControl;
-database databaseHead;
-
 void* planet(planet_type* myPlanet)
 {
-    database* tmp;
-    tmp = (database*)calloc(1,sizeof(database));
-    tmp->planetPointer = myPlanet;
+    NODE* tmp;
+    tmp = (NODE*)calloc(1,sizeof(NODE));
+    tmp->planet = myPlanet;
     pthread_mutex_lock(&databaseControl);
-    list_add_tail(&(tmp->list), &(databaseHead.list));
+    addPlanet(tmp);
     pthread_mutex_unlock(&databaseControl);
-    database* iter;
+    NODE* iter;
     while (myPlanet->life > 0)
     {
         double ax = 0, ay = 0, r, A;
         pthread_mutex_lock(&databaseControl);
-        list_for_each_entry(iter, &databaseHead.list, list)
+        for(iter = databaseHead; iter != NULL; iter = iter->next_planet)
         {
-            if (iter->planetPointer != myPlanet)
+            if (iter->planet != myPlanet)
             {
-                r = sqrt(pow(iter->planetPointer->sx - myPlanet->sx, 2) + pow(iter->planetPointer->sy - myPlanet->sy, 2));
-                A = G * iter->planetPointer->mass / pow(r, 2);
-                ax += A * (iter->planetPointer->sx - myPlanet->sx) / r;
-                ay += A * (iter->planetPointer->sy - myPlanet->sy) / r;
+                r = sqrt(pow(iter->planet->sx - myPlanet->sx, 2) + pow(iter->planet->sy - myPlanet->sy, 2));
+                A = G * iter->planet->mass / pow(r, 2);
+                ax += A * (iter->planet->sx - myPlanet->sx) / r;
+                ay += A * (iter->planet->sy - myPlanet->sy) / r;
             }
         }
         pthread_mutex_unlock(&databaseControl);
@@ -41,7 +38,8 @@ void* planet(planet_type* myPlanet)
         usleep(10000);
     }
     pthread_mutex_lock(&databaseControl);
-    list_del(&tmp->list);
+    removePlanet(tmp);
+    pthread_mutex_unlock(&databaseControl);
     free(tmp);
     //Send data that planet is dead
     free(myPlanet);
