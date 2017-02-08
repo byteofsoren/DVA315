@@ -5,29 +5,25 @@
 #include <string.h>
 #include <unistd.h>
 #include "graphics.hpp"
-extern "C"  {
-#include "wrapper.h"
-#include "list.h"
-#include "database.h"
-#include "common.h"
-}
+
 
 #define FRAMEUPDATETIMER 10000 //Microseconds, increase value for slower update time
 extern "C" void *showGrapics(void){
     Graphics *plot = new Graphics(DISPW, DISPH);
     // Read the data from the databese.
-    while(plot->isOpen()){
+    plot->isOpen();
+    while(plot->isOpen()){}
         // Running while the client is open.
         plot->clear();
         // add planets to the screen
         database *iter;
-        list_for_each_entry(iter,&databaseHead.list, list){
-            plot->addPlanet(iter->planetPointer);
-        }
-        plot->update();
-        usleep(FRAMEUPDATETIMER);
-    }
-
+        //list_for_each_entry(iter,&databaseHead.list, list){
+            //plot->addPlanet(iter->planetPointer);
+       //}
+      plot->update();
+      usleep(FRAMEUPDATETIMER);
+    //}
+    return (void*) NULL;
 }
 
 Graphics::Graphics(int width, int height)
@@ -46,7 +42,7 @@ Graphics::~Graphics(){
 void Graphics::clear(){
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            Graphics::~Graphics();
+            //Graphics::~Graphics();
         }
     }
     window.clear();
@@ -64,7 +60,7 @@ int  Graphics::isOpen()
 }
 
 
-int Graphics::addPlanet(planet_type *pl)
+/*int Graphics::addPlanet(planet_type *pl)
 {
     // Adds planet to the vector so it renders.
     sf::CircleShape gplanet(50);
@@ -72,5 +68,5 @@ int Graphics::addPlanet(planet_type *pl)
     gplanet.setFillColor(sf::Color::Green);
     window.draw(gplanet);
     return 0;
-}
+}*/
 

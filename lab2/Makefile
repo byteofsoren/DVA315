@@ -33,6 +33,7 @@ CFLAGS=-g -Wall
 
 .SUFFIXES:	.cpp
 .cpp.o:
+	rm -f $<
 	$(CC_CPP) $(LFLAGS) $(CFLAGS) -c $<
 
 .c.o:
