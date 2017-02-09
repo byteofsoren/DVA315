@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "wrapper.h"
 
 #include <form.h>
@@ -9,8 +10,39 @@
 //mqd_t serverHandle;
 
 
-void initwindows()
+planet_type *createPlanet(FIELD **fiealds){
+    planet_type *pl;
+    pl = (planet_type *) calloc(1,sizeof(planet_type));
+    //pl->name
+    //field_buffer( &fiealds[0], 0);
+    int counter = 0;
+    strcat(pl->name,field_buffer(fiealds[counter],0));
+    counter++;
+    char *text = field_buffer(fiealds[counter],0);
+    int mass =  atoi(text);
+    pl->mass = mass;
+    counter++;
+    pl->life= atoi(field_buffer(fiealds[counter],0));
+    counter++;
+    pl->sx = atoi(field_buffer(fiealds[counter],0));
+    counter++;
+    pl->sy = atoi(field_buffer(fiealds[counter],0));
+    counter++;
+    pl->vx = atoi(field_buffer(fiealds[counter],0));
+    counter++;
+    pl->vy = atoi(field_buffer(fiealds[counter],0));
+    return pl;
+}
+void printPlanet(planet_type *pl, const char *message)
 {
+    int posY = LINES - 10, posX = 10;
+    static int rowY = 0;
+    char *buffer;
+    buffer = (char *) calloc(100,sizeof(char));
+    //mvprintw(posY+rowY, posX, pl->name );
+    sprintf(buffer, "%s: name: %s\tmass: %f\tpos(%f,%f)", message, pl->name, pl->mass,pl->sx,pl->sy); 
+    mvprintw(posY+rowY, posX, buffer);
+    rowY++;
 }
 /*
 int connectToServer(char * name)
@@ -22,7 +54,7 @@ int connectToServer(char * name)
 }
 */
 
-int main()
+int main( )
 {
  
 	initscr();
@@ -46,10 +78,14 @@ int main()
         "6. Speed X: ",
         "7. Speed Y: "};
     //Name = new_field(1,30,posY, posY,0,0);
-    FIELD *fiealds[nrFealds];
+    FIELD **fiealds;
+    fiealds = (FIELD**) calloc(1, sizeof(FIELD));
+    //FIELD *fiealds[nrFealds];
     FORM *form;
+    //char *text[nrFealds - 1];
     mvprintw(2,20,"Create planets");
     for (int i = 0; i < nrFealds - 1; ++i) {
+        fiealds[i] = (FIELD*) calloc(nrFealds, sizeof(FIELD));
         fiealds[i] = new_field(1,30,posY + i * spaceY, posX ,0,0);
         if (fiealds[i] == NULL ) {
             printf("Fieald is NULL\nExit\n");
@@ -59,6 +95,9 @@ int main()
         set_field_back(fiealds[i], COLOR_PAIR(1));
         set_field_back(fiealds[i], A_UNDERLINE);
         field_opts_off(fiealds[i], O_AUTOSKIP);
+        //text[i] = NULL;
+        //set_field_userptr(fiealds[i], text[i]);
+        //set_field_type(fiealds[i], TYPE_ALNUM,30);
     }
     fiealds[nrFealds] = NULL;       // Terminating the fealds.
     form = new_form(fiealds);
@@ -82,14 +121,21 @@ int main()
             case KEY_F(5):
                 // Send data and emapyt the fiealds.
                 mvprintw(20,10,"Created plannet");
+                //text[0] = field_userptr(fiealds[0]);
+                //field_buffer(fiealds[0], 30);bbb
+                //char *text = field_buffer(fiealds[0] , 0);
+                //mvprintw(21,10, text);
+                planet_type *pl = createPlanet(fiealds);
+                printPlanet(pl, "Created");
                 break;
-            case KEY_DOWN:
+            case 9:     // tab to go to nex line
+            case 10:    // Eenter for next line
+                form_driver(form, REQ_END_LINE);
                 form_driver(form, REQ_NEXT_FIELD);
-                form_driver(form, REQ_END_LINE);
                 break;
-            case KEY_UP:
-                form_driver(form, REQ_PREV_FIELD);
+            case 353:   //Shift tabb to go back
                 form_driver(form, REQ_END_LINE);
+                form_driver(form, REQ_PREV_FIELD);
                 break;
             case KEY_F(10):
                 running = 0;
@@ -101,7 +147,9 @@ int main()
                 break;
             default:
                 //mvprintw(0,0, (char*)ch);
-                form_driver(form, ch);
+                if ((ch >= 45) && (ch <= 122)) {
+                    form_driver(form, ch);
+                }
         }
     }
     // Freeing memmory. =)
