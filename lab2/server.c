@@ -45,3 +45,20 @@ void* planet(planet_type* myPlanet)
     free(myPlanet);
     return (void*) NULL;
 }
+
+int main(void)
+{
+    int messageID;
+    MQcreate(&messageID, MQNAME);
+    struct messageBuffer readBuffer;
+    //create graphics thread
+    while(1)
+    {
+        if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
+        {
+            planet_type* newPlanet = (planet_type*)calloc(1, sizeof(planet_type));
+            *newPlanet = readBuffer;
+            threadCreate(planet, newPlanet);
+        }
+    }
+}

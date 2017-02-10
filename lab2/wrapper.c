@@ -72,13 +72,10 @@ int MQclose(int id)
 }
 
 //creats at thread using pthreads, starting functionCall in that thread
-int threadCreate (void * functionCall, int threadParam)
+int threadCreate (void * functionCall, void* ptr)
 {
 	pthread_t thread;
-    int thread_pid = 0; 
-    thread_pid = pthread_create(&thread, NULL, functionCall, &threadParam);
-    return thread_pid;
-	//return pthread_create(&thread, NULL, functionCall, NULL);
+    return pthread_create(&thread, NULL, functionCall, ptr);
 }
 
 

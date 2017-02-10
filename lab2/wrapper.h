@@ -12,7 +12,7 @@
 
 
 // Mailslot handling:
-extern int threadCreate (void * functionCall, int threadParam);
+extern int threadCreate (void * functionCall, void* ptr);
 
 typedef struct pt {
     char        name[20];   // Name of planet
