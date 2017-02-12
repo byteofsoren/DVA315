@@ -59,15 +59,15 @@ planet_type *createPlanet(FIELD **fiealds){
     int mass =  atoi(text);
     pl->mass = mass;
     counter++;
-    pl->life= atoi(field_buffer(fiealds[counter],0));
+    pl->life= atof(field_buffer(fiealds[counter],0));
     counter++;
-    pl->sx = atoi(field_buffer(fiealds[counter],0));
+    pl->sx = atof(field_buffer(fiealds[counter],0));
     counter++;
-    pl->sy = atoi(field_buffer(fiealds[counter],0));
+    pl->sy = atof(field_buffer(fiealds[counter],0));
     counter++;
-    pl->vx = atoi(field_buffer(fiealds[counter],0));
+    pl->vx = atof(field_buffer(fiealds[counter],0));
     counter++;
-    pl->vy = atoi(field_buffer(fiealds[counter],0));
+    pl->vy = atof(field_buffer(fiealds[counter],0));
     pl->pid = my_pid;
     return pl;
 }
