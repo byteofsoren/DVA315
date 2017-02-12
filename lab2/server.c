@@ -4,7 +4,7 @@
 #include "graphics.h"
 #include <math.h>
 #define G 0.0000000000667259
-#define dt 1
+#define dt 10
 int SERVER_RUNNING = 1;
 
 void* planet(planet_type* myPlanet)
