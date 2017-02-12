@@ -1,6 +1,7 @@
 #include "wrapper.h"
 #include "common.h"
 #include "database.h"
+#include "graphics.hpp"
 #include <math.h>
 #define G 0.0000000000667259
 #define dt 1
@@ -67,7 +68,7 @@ int main(void)
     {
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
         {
-            SERVER_RUNNING = readBuffer.command
+            SERVER_RUNNING = readBuffer.command;
             planet_type* newPlanet = (planet_type*)calloc(1, sizeof(planet_type));
             *newPlanet = readBuffer.planet;
             threadCreate(planet, newPlanet);
