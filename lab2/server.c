@@ -61,6 +61,7 @@ void* planet(planet_type* myPlanet)
 void* callGraphics(void)
 {
     showGrapics();
+    return (void*) NULL;
 }
 
 int main(void)
