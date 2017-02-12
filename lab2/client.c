@@ -12,12 +12,36 @@ int my_pid;
 int isRunning;
 //mqd_t serverHandle;
 
+void printPlanet(planet_type *pl, const char *message);
+planet_type *createPlanet(FIELD **fiealds);
+int  sendPlanet(planet_type *pl);
+
+
 void *resever(void)
 {
     // This is a threaded function
+    int id;
+    int s = MQcreate(&id, MQNAME);
+    if (s == 0) {
+        printf("Cant create massage queue in thread");
+        exit(EXIT_FAILURE);
+    }
+    struct messageBuffer buffer;
     while(isRunning){
-        
-        usleep(60000);
+        while(!MQread(id, my_pid,&buffer)){
+            usleep(60000);
+        }
+        switch (buffer.command)  {
+            case 0:
+                // Död planet
+                printPlanet(&buffer.planet, "Planet died");
+                break;
+            case 1:
+                // Connection establiched
+                printPlanet(&buffer.planet, "Conected");
+                break;
+                
+        }
     }
 
     return NULL;
@@ -49,7 +73,7 @@ planet_type *createPlanet(FIELD **fiealds){
 }
 void printPlanet(planet_type *pl, const char *message)
 {
-    int posY = LINES - 10, posX = 10;
+    int posY = LINES - 20, posX = 10;
     static int rowY = 0;
     char *buffer;
     buffer = (char *) calloc(100,sizeof(char));
