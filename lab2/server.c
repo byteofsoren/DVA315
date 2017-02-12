@@ -13,6 +13,12 @@ void* planet(planet_type* myPlanet)
     pthread_mutex_lock(&databaseControl);
     addPlanet(tmp);
     pthread_mutex_unlock(&databaseControl);
+    int messageID;
+    MQcreate(&messageID, MQNAME);
+    struct messageBuffer writeBuffer;
+    writebuffer.mtype = myPlanet->pid;
+    writebuffer.planet = *myPlanet;
+    MQwrite(messageID, &writebuffer);
     NODE* iter;
     while (myPlanet->life > 0)
     {
@@ -41,7 +47,9 @@ void* planet(planet_type* myPlanet)
     removePlanet(tmp);
     pthread_mutex_unlock(&databaseControl);
     free(tmp);
-    //Send data that planet is dead
+    writebuffer.mtype = myPlanet->pid;
+    writebuffer.planet = *myPlanet;
+    MQwrite(messageID, &writebuffer); 
     free(myPlanet);
     return (void*) NULL;
 }
@@ -51,7 +59,7 @@ int main(void)
     int messageID;
     MQcreate(&messageID, MQNAME);
     struct messageBuffer readBuffer;
-    //create graphics thread
+    threadCreate(showGrapics, NULL);
     while(1)
     {
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
