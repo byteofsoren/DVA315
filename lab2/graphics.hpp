@@ -2,8 +2,6 @@
 #define GRAPHICS_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "graphics.h"
-//#include "database.h"
 extern "C" {
 #include "common.h"
 #include "wrapper.h"

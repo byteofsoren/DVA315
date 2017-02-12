@@ -58,12 +58,17 @@ void* planet(planet_type* myPlanet)
     return (void*) NULL;
 }
 
+void* callGraphics(void)
+{
+    showGrapics();
+}
+
 int main(void)
 {
     int messageID;
     MQcreate(&messageID, MQNAME);
     struct messageBuffer readBuffer;
-    threadCreate(showGrapics, NULL);
+    threadCreate(callGraphics, NULL);
     while(SERVER_RUNNING)
     {
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
