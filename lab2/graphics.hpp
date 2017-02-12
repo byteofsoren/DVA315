@@ -2,12 +2,13 @@
 #define GRAPHICS_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "graphics.h"
 //#include "database.h"
 extern "C" {
 #include "common.h"
 #include "wrapper.h"
 }
-extern "C" void *showGrapics(void); // This is a thread create functinon to show the plotter.
+
 
 class Graphics
 {
