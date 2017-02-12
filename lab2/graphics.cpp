@@ -10,24 +10,6 @@
 
 #define FRAMEUPDATETIMER 10000 //Microseconds, increase value for slower update time
 
-void showGrapics(void){
-    Graphics *plot = new Graphics(DISPW, DISPH);
-    // Read the data from the databese.
-    plot->isOpen();
-    while(plot->isOpen()){//}
-        // Running while the client is open.
-        plot->clear();
-        // add planets to the screen
-        pthread_mutex_lock(&databaseControl);       // first lock the mutex
-        NODE* iter;                                 // pointer to iterate the planets.
-        for (iter = databaseHead; iter !=  NULL ; iter = iter->prev_planet) {
-            plot->addPlanet(iter->planet);
-        }
-        pthread_mutex_unlock(&databaseControl);     // Un lock the mutex.
-        plot->update();
-        usleep(FRAMEUPDATETIMER);
-    }
-}
 
 Graphics::Graphics(int width, int height)
 {
@@ -66,10 +48,31 @@ int  Graphics::isOpen()
 int Graphics::addPlanet(planet_type *pl)
 {
     // Adds planet to the vector so it renders.
-    sf::CircleShape gplanet(pl->mass);
-    gplanet.setPosition(pl->sx, pl->sy);
+    sf::CircleShape gplanet(pl->mass*0.1);
+    sf::Vector2u size = window.getSize();
+    gplanet.setPosition(pl->sx + size.x/2, pl->sy + size.y/2);
     gplanet.setFillColor(sf::Color::Green);
     window.draw(gplanet);
     return 0;
 }
+
+void showGrapics(void){
+    Graphics *plot = new Graphics(DISPW, DISPH);
+    // Read the data from the databese.
+    plot->isOpen();
+    while(plot->isOpen()){//}
+        // Running while the client is open.
+        plot->clear();
+        // add planets to the screen
+        pthread_mutex_lock(&databaseControl);       // first lock the mutex
+        NODE* iter;                                 // pointer to iterate the planets.
+        for (iter = databaseHead; iter !=  NULL ; iter = iter->prev_planet) {
+            plot->addPlanet(iter->planet);
+        }
+        pthread_mutex_unlock(&databaseControl);     // Un lock the mutex.
+        plot->update();
+        usleep(FRAMEUPDATETIMER);
+    }
+}
+
 
