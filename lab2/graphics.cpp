@@ -5,11 +5,12 @@
 #include <string.h>
 #include <unistd.h>
 #include "graphics.hpp"
+#include "graphics.h"
 #include "database.h"
 
 #define FRAMEUPDATETIMER 10000 //Microseconds, increase value for slower update time
 
-void *showGrapics(void){
+void showGrapics(void){
     Graphics *plot = new Graphics(DISPW, DISPH);
     // Read the data from the databese.
     plot->isOpen();
@@ -26,7 +27,6 @@ void *showGrapics(void){
         plot->update();
         usleep(FRAMEUPDATETIMER);
     }
-    return (void*) NULL;
 }
 
 Graphics::Graphics(int width, int height)
