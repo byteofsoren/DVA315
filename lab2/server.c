@@ -1,7 +1,7 @@
 #include "wrapper.h"
 #include "common.h"
 #include "database.h"
-#include "graphics.hpp"
+extern "C" void *showGrapics(void);
 #include <math.h>
 #define G 0.0000000000667259
 #define dt 1
