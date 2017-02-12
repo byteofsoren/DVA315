@@ -23,7 +23,7 @@ void* planet(planet_type* myPlanet)
     writeBuffer.planet = *myPlanet;
     MQwrite(messageID, &writeBuffer);
     NODE* iter;
-    while (myPlanet->life > 0 && SERVER_RUNNING)
+    while (myPlanet->life > 0)
     {
         double ax = 0, ay = 0, r, A;
         pthread_mutex_lock(&databaseControl);
@@ -70,11 +70,11 @@ int main(void)
     MQcreate(&messageID, MQNAME);
     struct messageBuffer readBuffer;
     threadCreate(callGraphics, NULL);
-    while(SERVER_RUNNING)
+    while(1)//SERVER_RUNNING)
     {
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
         {
-            SERVER_RUNNING = readBuffer.command;
+            //SERVER_RUNNING = readBuffer.command;
             planet_type* newPlanet = (planet_type*)calloc(1, sizeof(planet_type));
             *newPlanet = readBuffer.planet;
             threadCreate(planet, newPlanet);
