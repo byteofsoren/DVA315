@@ -2,13 +2,26 @@
 #include <string.h>
 #include <stdlib.h>
 #include "wrapper.h"
+#include "common.h"
 
 #include <form.h>
 
 #define PLANETS 1000000
 #define PLANETIPC "PlanetLab"
+int my_pid;
+int isRunning;
 //mqd_t serverHandle;
 
+void *resever(void)
+{
+    // This is a threaded function
+    while(isRunning){
+        
+        usleep(60000);
+    }
+
+    return NULL;
+}
 
 planet_type *createPlanet(FIELD **fiealds){
     planet_type *pl;
@@ -31,6 +44,7 @@ planet_type *createPlanet(FIELD **fiealds){
     pl->vx = atoi(field_buffer(fiealds[counter],0));
     counter++;
     pl->vy = atoi(field_buffer(fiealds[counter],0));
+    pl->pid = my_pid;
     return pl;
 }
 void printPlanet(planet_type *pl, const char *message)
@@ -44,6 +58,17 @@ void printPlanet(planet_type *pl, const char *message)
     mvprintw(posY+rowY, posX, buffer);
     rowY++;
 }
+int  sendPlanet(planet_type *pl)
+{
+    struct messageBuffer buf;
+    buf.mtype = 1;
+    buf.planet = *pl;
+    int id;
+    MQcreate(&id, MQNAME);
+    MQwrite(id,&buf);
+    //MQclose(id);
+    return id;
+}
 /*
 int connectToServer(char * name)
 {
@@ -56,12 +81,13 @@ int connectToServer(char * name)
 
 int main( )
 {
- 
+
 	initscr();
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
-
+    my_pid = getpid();
+    isRunning = 1;
 	/* Initialize all the colors */
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
@@ -115,6 +141,9 @@ int main( )
     // tabb
     int running = 1;
     int ch = 0;
+    // Create threeed to reead messages form server
+    pthread_t resThread;
+    pthread_create(
     while (running) {
         ch = getch();
         switch (ch ) {
@@ -126,6 +155,7 @@ int main( )
                 //char *text = field_buffer(fiealds[0] , 0);
                 //mvprintw(21,10, text);
                 planet_type *pl = createPlanet(fiealds);
+                sendPlanet(pl);
                 printPlanet(pl, "Created");
                 break;
             case 9:     // tab to go to nex line
