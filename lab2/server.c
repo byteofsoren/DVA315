@@ -57,7 +57,7 @@ int main(void)
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
         {
             planet_type* newPlanet = (planet_type*)calloc(1, sizeof(planet_type));
-            *newPlanet = readBuffer;
+            *newPlanet = readBuffer.planet;
             threadCreate(planet, newPlanet);
         }
     }
