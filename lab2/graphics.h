@@ -1,4 +1,4 @@
 #ifndef GRAPH
 #define GRAPH
-extern "C" void *showGrapics(void);
+extern void *showGrapics(void);
 #endif
