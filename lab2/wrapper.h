@@ -27,6 +27,7 @@ typedef struct pt {
 
 struct messageBuffer {
     long mtype;
+    int command;
     planet_type planet;
 };
 
