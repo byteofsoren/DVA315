@@ -10,6 +10,7 @@
 #define PLANETIPC "PlanetLab"
 int my_pid;
 int isRunning;
+pthread_mutex_t dismut;
 //mqd_t serverHandle;
 
 void printPlanet(planet_type *pl, const char *message);
@@ -40,10 +41,10 @@ void *resever(void)
                 // Connection establiched
                 printPlanet(&buffer.planet, "Conected");
                 break;
-                
+        doupdate();
         }
     }
-
+    
     return NULL;
 }
 
@@ -78,7 +79,9 @@ void printPlanet(planet_type *pl, const char *message)
     char *buffer;
     buffer = (char *) calloc(100,sizeof(char));
     //mvprintw(posY+rowY, posX, pl->name );
+    pthread_mutex_lock(&dismut);
     sprintf(buffer, "%s: name: %s\tmass: %f\tpos(%f,%f)", message, pl->name, pl->mass,pl->sx,pl->sy); 
+    pthread_mutex_unlock(&dismut);
     mvprintw(posY+rowY, posX, buffer);
     rowY++;
 }
