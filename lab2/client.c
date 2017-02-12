@@ -86,6 +86,7 @@ int  sendPlanet(planet_type *pl)
 {
     struct messageBuffer buf;
     buf.mtype = 1;
+    buf.command = 1;
     buf.planet = *pl;
     int id;
     MQcreate(&id, MQNAME);
