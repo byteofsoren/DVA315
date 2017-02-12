@@ -66,7 +66,7 @@ void showGrapics(void){
         // add planets to the screen
         pthread_mutex_lock(&databaseControl);       // first lock the mutex
         NODE* iter;                                 // pointer to iterate the planets.
-        for (iter = databaseHead; iter !=  NULL ; iter = iter->prev_planet) {
+        for (iter = databaseHead; iter !=  NULL ; iter = iter->next_planet) {
             plot->addPlanet(iter->planet);
         }
         pthread_mutex_unlock(&databaseControl);     // Un lock the mutex.
