@@ -43,7 +43,7 @@ void* planet(planet_type* myPlanet)
         myPlanet->sx += myPlanet->vx * dt;
         myPlanet->sy += myPlanet->vy * dt;
         myPlanet->life -= 1;
-        if ((myPlanet->sx < 0) || (myPlanet->sx > DISPH) || (myPlanet->sy < 0) || (myPlanet->sy > DISPW)) myPlanet->life = 0;
+        if ((abs(myPlanet->sx) > DISPH) || (abs(myPlanet->sy) > DISPW)) myPlanet->life = 0;
         usleep(10000);
     }
     pthread_mutex_lock(&databaseControl);
