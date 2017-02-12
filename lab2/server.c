@@ -4,6 +4,7 @@
 #include <math.h>
 #define G 0.0000000000667259
 #define dt 1
+int SERVER_RUNNING = 1;
 
 void* planet(planet_type* myPlanet)
 {
@@ -16,11 +17,12 @@ void* planet(planet_type* myPlanet)
     int messageID;
     MQcreate(&messageID, MQNAME);
     struct messageBuffer writeBuffer;
-    writebuffer.mtype = myPlanet->pid;
-    writebuffer.planet = *myPlanet;
-    MQwrite(messageID, &writebuffer);
+    writeBuffer.command = 1;
+    writeBuffer.mtype = myPlanet->pid;
+    writeBuffer.planet = *myPlanet;
+    MQwrite(messageID, &writeBuffer);
     NODE* iter;
-    while (myPlanet->life > 0)
+    while (myPlanet->life > 0 && SERVER_RUNNING)
     {
         double ax = 0, ay = 0, r, A;
         pthread_mutex_lock(&databaseControl);
@@ -47,9 +49,10 @@ void* planet(planet_type* myPlanet)
     removePlanet(tmp);
     pthread_mutex_unlock(&databaseControl);
     free(tmp);
-    writebuffer.mtype = myPlanet->pid;
-    writebuffer.planet = *myPlanet;
-    MQwrite(messageID, &writebuffer); 
+    writeBuffer.command = 0;
+    writeBuffer.mtype = myPlanet->pid;
+    writeBuffer.planet = *myPlanet;
+    MQwrite(messageID, &writeBuffer); 
     free(myPlanet);
     return (void*) NULL;
 }
@@ -60,13 +63,16 @@ int main(void)
     MQcreate(&messageID, MQNAME);
     struct messageBuffer readBuffer;
     threadCreate(showGrapics, NULL);
-    while(1)
+    while(SERVER_RUNNING)
     {
         if(MQread(messageID, MAIN_MQ_TYPE, &readBuffer))
         {
+            SERVER_RUNNING = readBuffer.command
             planet_type* newPlanet = (planet_type*)calloc(1, sizeof(planet_type));
             *newPlanet = readBuffer.planet;
             threadCreate(planet, newPlanet);
         }
     }
+    MQclose(messageID);
+    usleep(100000);
 }
