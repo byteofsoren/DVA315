@@ -167,7 +167,7 @@ int main( )
     int ch = 0;
     // Create threeed to reead messages form server
     pthread_t resThread;
-    pthread_create(
+    pthread_create(&resThread, NULL, (void*)resever, NULL);
     while (running) {
         ch = getch();
         switch (ch ) {
