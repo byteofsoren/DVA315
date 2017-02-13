@@ -48,7 +48,7 @@ int  Graphics::isOpen()
 int Graphics::addPlanet(planet_type *pl)
 {
     // Adds planet to the vector so it renders.
-    int radius = pl->mass * 0 + 1;
+    int radius = pl->mass * 0 + 3;
     sf::CircleShape gplanet(radius);
     sf::Vector2u size = window.getSize();
     gplanet.setPosition(pl->sx + size.x/2 - radius, pl->sy + size.y/2 - radius);
