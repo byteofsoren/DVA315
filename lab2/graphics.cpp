@@ -44,6 +44,10 @@ int  Graphics::isOpen()
     return window.isOpen();
 }
 
+int gradient(int life)
+{
+    return life/(2000/51);
+}
 
 int Graphics::addPlanet(planet_type *pl)
 {
@@ -52,7 +56,7 @@ int Graphics::addPlanet(planet_type *pl)
     sf::CircleShape gplanet(radius);
     sf::Vector2u size = window.getSize();
     gplanet.setPosition(pl->sx + size.x/2 - radius, pl->sy + size.y/2 - radius);
-    gplanet.setFillColor(sf::Color::Green);
+    gplanet.setFillColor(sf::Color(255 - gradient(pl->life),gradient(pl->life),0));
     window.draw(gplanet);
     return 0;
 }
