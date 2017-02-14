@@ -39,3 +39,4 @@ tags
 
 #ignore program
 prog
+*.sh
