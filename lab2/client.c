@@ -6,6 +6,7 @@
 
 #include <form.h>
 
+
 #define SERVEREXE "./server.out"
 #define PLANETS 1000000
 #define PLANETIPC "PlanetLab"
@@ -224,6 +225,7 @@ int main( )
     my_pid = getpid();
     isRunning = 1;
 	/* Initialize all the colors */
+    curs_set(0);
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(3, COLOR_BLUE, COLOR_BLACK);
@@ -268,7 +270,7 @@ int main( )
         mvprintw(posY + i * spaceY, posX - 15, labels[i]);
     }
     int keyposY = 7; 
-    mvprintw(keyposY,50,"F3 - Pause server");
+    mvprintw(keyposY,50,"F7 - Pause server");
     keyposY++;
     mvprintw(keyposY,50,"F5 - Create Planet");
     //keyposY++;
@@ -304,13 +306,13 @@ int main( )
         switch (ch ) {
             case 9:     // tab to go to nex line
             case 10:  {  // Eenter for next line
-                board_update(board);
+        //        board_update(board);
                 form_driver(form, REQ_END_LINE);
                 form_driver(form, REQ_NEXT_FIELD);
                 break;
             }
             case 353:{   //Shift tabb to go back
-                board_update(board);
+       //         board_update(board);
                 form_driver(form, REQ_END_LINE);
                 form_driver(form, REQ_PREV_FIELD);
                 break;
@@ -321,6 +323,11 @@ int main( )
                 board_addPlanet(board,"Created:", planet);
                 sendPlanet(planet, 1);
                 free(planet);
+                break;
+            }
+            case KEY_F(7):{
+                board_addMessage(board, "Pause server");
+                sendPlanet(NULL, 3);
                 break;
             }
             case KEY_F(10):{
@@ -337,12 +344,7 @@ int main( )
                 }
                 break; 
             }*/
-            case KEY_F(3):{
-                board_addMessage(board, "Pause server");
-                sendPlanet(NULL, 3);
-                break;
-            }
-            case 127:{
+           case 127:{
                 //form_driver(form, REQ_CLR_FIELD);
                 form_driver(form, REQ_LEFT_CHAR);
                 form_driver(form, REQ_DEL_CHAR);
