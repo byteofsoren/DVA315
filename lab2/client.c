@@ -222,6 +222,7 @@ int main( )
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+    start_color();
     my_pid = getpid();
     isRunning = 1;
 	/* Initialize all the colors */
@@ -230,6 +231,7 @@ int main( )
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 	init_pair(3, COLOR_BLUE, COLOR_BLACK);
 	init_pair(4, COLOR_CYAN, COLOR_BLACK);
+	init_pair(5, COLOR_BLACK, COLOR_WHITE);
 
     int posY = 5, posX = 18, nrFealds = 8 , spaceY = 2;
     const char *labels[] = {
@@ -254,8 +256,8 @@ int main( )
             printf("Fieald is NULL\nExit\n");
             exit(EXIT_FAILURE);
         }
-        set_field_fore(fiealds[i], COLOR_PAIR(3));
-        set_field_back(fiealds[i], COLOR_PAIR(1));
+        set_field_fore(fiealds[i], COLOR_PAIR(5));
+        set_field_back(fiealds[i], COLOR_PAIR(5));
         set_field_back(fiealds[i], A_UNDERLINE);
         field_opts_off(fiealds[i], O_AUTOSKIP);
         //text[i] = NULL;
