@@ -305,18 +305,23 @@ int main( )
     threadCreate(resever, NULL);
     while (running) {
         ch = getch();
+        for (short i = 0; i < form->maxfield; ++i) {
+            set_field_fore(form->field[i], COLOR_PAIR(4));
+        }
         switch (ch ) {
             case 9:     // tab to go to nex line
             case 10:  {  // Eenter for next line
         //        board_update(board);
                 form_driver(form, REQ_END_LINE);
                 form_driver(form, REQ_NEXT_FIELD);
+                set_field_fore(form->current, COLOR_PAIR(2));
                 break;
             }
             case 353:{   //Shift tabb to go back
        //         board_update(board);
                 form_driver(form, REQ_END_LINE);
                 form_driver(form, REQ_PREV_FIELD);
+                set_field_fore(form->current, COLOR_PAIR(2));
                 break;
             }
             case KEY_F(5):{
@@ -350,11 +355,15 @@ int main( )
                 //form_driver(form, REQ_CLR_FIELD);
                 form_driver(form, REQ_LEFT_CHAR);
                 form_driver(form, REQ_DEL_CHAR);
+                set_field_fore(form->current, COLOR_PAIR(1));
                 board_update(board);
                 break;
             }
             default:{
                 //mvprintw(0,0, (char*)ch);
+                 //form->current 
+               set_field_fore(form->current, COLOR_PAIR(2));
+                 
                 if ((ch >= 45) && (ch <= 122)) {
                     form_driver(form, ch);
                 }
